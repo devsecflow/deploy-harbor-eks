@@ -116,7 +116,7 @@ Let's get you up and running:
    tofu init
    ```
 
-4. Create a `terraform.tfvars` file with your specific values:
+4. Create a `terraform.tfvars` file with your specific values in your `tofu` directory:
 
    ```hcl
    region       = "us-west-2"
@@ -225,7 +225,18 @@ This will run through a series of checks:
 
 ## Continuous Integration
 
-We've set up a CI pipeline that runs our test suite on every push and pull request. If you're curious about the details, check out the `.github/workflows` directory.
+We've implemented a comprehensive CI pipeline using GitHub Actions. On every push and pull request, our workflow:
+
+- Runs Go tests
+- Checks OpenTofu formatting
+- Validates OpenTofu configurations
+- Runs tflint for additional OpenTofu linting
+- Ensures documentation is up-to-date
+- Performs security scans using Snyk and tfsec
+- Lints Go code using golangci-lint
+- Checks Markdown files for consistent styling
+
+You can find the workflow configuration in the `.github/workflows/ci.yml` file.
 
 ## Contributing
 
