@@ -9,6 +9,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: us-west-2
     steps:
       - uses: actions/checkout@v4
       - name: Set up Go
@@ -27,25 +31,9 @@ jobs:
           chmod +x terraform-docs
           sudo mv terraform-docs /usr/local/bin/
           rm terraform-docs.tar.gz
-      - name: Debug directory structure
-        run: |
-          echo "Current directory:"
-          pwd
-          echo "Contents of current directory:"
-          ls -la
-          echo "Contents of tofu directory:"
-          ls -la tofu
       - name: Run tests
         run: |
-          echo "Current directory before cd:"
-          pwd
           cd test
-          echo "Current directory after cd:"
-          pwd
-          echo "Contents of current directory:"
-          ls -la
-          echo "Contents of parent directory:"
-          ls -la ..
           go test -v ./...
 
   security:
