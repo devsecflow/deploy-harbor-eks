@@ -2,68 +2,71 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: '1.20'
-    - name: Set up OpenTofu
-      run: |
-        LATEST_VERSION=$(curl -s https://api.github.com/repos/opentofu/opentofu/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//')
-        curl -Lo ./tofu.tar.gz "https://github.com/opentofu/opentofu/releases/download/v${LATEST_VERSION}/tofu_${LATEST_VERSION}_linux_amd64.tar.gz"
-        tar -xzf tofu.tar.gz --overwrite
-        sudo mv tofu /usr/local/bin/
-        rm -rf tofu tofu.tar.gz 
-    - name: Install tflint
-      run: |
-        curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
-    - name: Install terraform-docs
-      run: |
-        curl -Lo ./terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.16.0/terraform-docs-v0.16.0-linux-amd64.tar.gz
-        tar -xzf terraform-docs.tar.gz
-        chmod +x terraform-docs
-        sudo mv terraform-docs /usr/local/bin/
-        rm terraform-docs.tar.gz
-    - name: Run tests
-      run: |
-        cd test
-        go test -v ./...
+      - uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.20'
+      - name: Set up OpenTofu
+        run: |
+          LATEST_VERSION=$(curl -s https://api.github.com/repos/opentofu/opentofu/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//')
+          curl -Lo ./tofu.tar.gz "https://github.com/opentofu/opentofu/releases/download/v${LATEST_VERSION}/tofu_${LATEST_VERSION}_linux_amd64.tar.gz"
+          if [ -d "tofu" ]; then
+            sudo rm -rf tofu  # Clean up the existing directory
+          fi
+          tar -xzf tofu.tar.gz
+          sudo mv tofu /usr/local/bin/
+          rm tofu.tar.gz
+      - name: Install tflint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+      - name: Install terraform-docs
+        run: |
+          curl -Lo ./terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.16.0/terraform-docs-v0.16.0-linux-amd64.tar.gz
+          tar -xzf terraform-docs.tar.gz
+          chmod +x terraform-docs
+          sudo mv terraform-docs /usr/local/bin/
+          rm terraform-docs.tar.gz
+      - name: Run tests
+        run: |
+          cd test
+          go test -v ./...
 
   security:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Run Snyk to check for vulnerabilities
-      uses: snyk/actions/iac@master
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      with:
-        command: test
-        args: ./tofu
-    - name: Run tfsec
-      uses: aquasecurity/tfsec-action@v1.0.0
-      with:
-        working_directory: ./tofu
-        additional_args: '--config-file=../.tfsec.yml'
+      - uses: actions/checkout@v4
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/iac@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: test
+          args: ./tofu
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-action@v1.0.0
+        with:
+          working_directory: ./tofu
+          additional_args: '--config-file=../.tfsec.yml'
 
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Run golangci-lint
-      uses: golangci/golangci-lint-action@v3
-      with:
-        working-directory: test
-    - name: Run markdown lint
-      uses: avto-dev/markdown-lint@v1
-      with:
-        config: '.markdownlint.json'
-        args: '**/*.md'
+      - uses: actions/checkout@v4
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          working-directory: test
+      - name: Run markdown lint
+        uses: avto-dev/markdown-lint@v1
+        with:
+          config: '.markdownlint.json'
+          args: '**/*.md'
