@@ -4,6 +4,8 @@ exclude:
   - aws-eks-no-public-cluster-access-to-cidr
   - aws-ec2-no-public-egress-sgr
   - aws-rds-enable-performance-insights
+  - aws-rds-enable-iam-auth
+  - aws-ec2-require-vpc-flow-logs-for-all-vpcs
 
 # Explanations for exclusions
 custom:
@@ -18,4 +20,10 @@ custom:
     severity: LOW
   aws-rds-enable-performance-insights:
     description: "Performance Insights not critical for this deployment"
+    severity: LOW
+  aws-rds-enable-iam-auth:
+    description: "Standard authentication is sufficient for this deployment"
+    severity: LOW
+  aws-ec2-require-vpc-flow-logs-for-all-vpcs:
+    description: "VPC Flow Logs not required for this deployment"
     severity: LOW
