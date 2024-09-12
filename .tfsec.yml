@@ -1,32 +1,18 @@
----
 exclude:
-  - aws-eks-no-public-cluster-access
-  - aws-eks-no-public-cluster-access-to-cidr
-  - aws-ec2-no-public-egress-sgr
-  - aws-rds-enable-performance-insights
-  - aws-rds-enable-iam-auth
-  - aws-ec2-require-vpc-flow-logs-for-all-vpcs
-
-# Explanations for exclusions
-custom:
-  aws-eks-no-public-cluster-access:
+  - id: aws-eks-no-public-cluster-access
     description: "Public access is required for our Harbor deployment; access is restricted by CIDR."
-    severity: LOW
-  aws-eks-no-public-cluster-access-to-cidr:
+  - id: aws-eks-no-public-cluster-access-to-cidr
     description: "Public access is required for our Harbor deployment, but CIDR is restricted to trusted ranges."
-    severity: LOW
-  aws-ec2-no-public-egress-sgr:
+  - id: aws-ec2-no-public-egress-sgr
     description: "Broad egress is needed for Harbor's functionality but restricted to trusted CIDRs."
-    severity: LOW
-  aws-rds-enable-performance-insights:
-    description: "Performance Insights are not critical for this deployment, so exclusion is justified."
-    severity: LOW
-  aws-rds-enable-iam-auth:
+  - id: aws-rds-enable-iam-auth
     description: "Standard authentication is sufficient for this deployment."
-    severity: LOW
-  aws-ec2-require-vpc-flow-logs-for-all-vpcs:
+  - id: aws-ec2-require-vpc-flow-logs-for-all-vpcs
     description: "VPC Flow Logs are not required for this specific deployment but was enabled in vpc.tf."
-    severity: LOW
 
-# Force tfsec to recognize the config file
-force_enforce_exclude: true
+severity_overrides:
+  aws-eks-no-public-cluster-access: LOW
+  aws-eks-no-public-cluster-access-to-cidr: LOW
+  aws-ec2-no-public-egress-sgr: LOW
+  aws-rds-enable-iam-auth: LOW
+  aws-ec2-require-vpc-flow-logs-for-all-vpcs: LOW
