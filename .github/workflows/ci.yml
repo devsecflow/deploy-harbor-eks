@@ -69,6 +69,8 @@ jobs:
   
   deploy-docs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     needs: [test, security, lint]
     if: github.ref == 'refs/heads/main'
     steps:
@@ -81,5 +83,9 @@ jobs:
         run: |
           pip install mkdocs
       - name: Build and deploy documentation
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           mkdocs gh-deploy --force
