@@ -18,6 +18,12 @@ module "vpc" {
   single_nat_gateway   = true
   enable_dns_hostnames = true
 
+  # VPC Flow Logs
+  enable_flow_log                      = true
+  create_flow_log_cloudwatch_log_group = true
+  create_flow_log_cloudwatch_iam_role  = true
+  flow_log_max_aggregation_interval    = 60
+
   # Tags for the VPC
   tags = {
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"

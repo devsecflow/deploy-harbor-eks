@@ -1,0 +1,18 @@
+exclude:
+  - id: aws-eks-no-public-cluster-access
+    description: "Public access is required for our Harbor deployment; access is restricted by CIDR."
+  - id: aws-eks-no-public-cluster-access-to-cidr
+    description: "Public access is required for our Harbor deployment, but CIDR is restricted to trusted ranges."
+  - id: aws-ec2-no-public-egress-sgr
+    description: "Broad egress is needed for Harbor's functionality but restricted to trusted CIDRs."
+  - id: aws-rds-enable-iam-auth
+    description: "Standard authentication is sufficient for this deployment."
+  - id: aws-ec2-require-vpc-flow-logs-for-all-vpcs
+    description: "VPC Flow Logs are not required for this specific deployment but was enabled in vpc.tf."
+
+severity_overrides:
+  aws-eks-no-public-cluster-access: LOW
+  aws-eks-no-public-cluster-access-to-cidr: LOW
+  aws-ec2-no-public-egress-sgr: LOW
+  aws-rds-enable-iam-auth: LOW
+  aws-ec2-require-vpc-flow-logs-for-all-vpcs: LOW
