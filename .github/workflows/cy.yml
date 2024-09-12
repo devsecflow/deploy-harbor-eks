@@ -19,10 +19,9 @@ jobs:
 
     - name: Set up OpenTofu
       run: |
-        wget https://github.com/opentofu/opentofu/releases/download/v1.6.0-alpha5/tofu_1.6.0-alpha5_linux_amd64.zip
-        unzip tofu_1.6.0-alpha5_linux_amd64.zip
-        sudo mv tofu /usr/local/bin/
-        rm tofu_1.6.0-alpha5_linux_amd64.zip
+        wget https://github.com/opentofu/opentofu/releases/download/v1.6.0-alpha5/tofu_1.6.0-alpha5_linux_amd64
+        chmod +x tofu_1.6.0-alpha5_linux_amd64
+        sudo mv tofu_1.6.0-alpha5_linux_amd64 /usr/local/bin/tofu
 
     - name: Install tflint
       run: |
