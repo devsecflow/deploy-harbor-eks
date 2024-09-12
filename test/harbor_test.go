@@ -22,6 +22,16 @@ func TestHarborDeployment(t *testing.T) {
 		t.Fatalf("Failed to change directory to %s: %v", tofuDir, err)
 	}
 
+	// Print current directory for debugging
+	currentDir, _ := os.Getwd()
+	t.Logf("Current directory: %s", currentDir)
+
+	// List contents of current directory for debugging
+	files, _ := os.ReadDir(".")
+	for _, file := range files {
+		t.Logf("File: %s", file.Name())
+	}
+
 	// Set the TERRATEST_TERRAFORM_EXECUTABLE environment variable to "tofu"
 	os.Setenv("TERRATEST_TERRAFORM_EXECUTABLE", "tofu")
 
@@ -54,10 +64,6 @@ func TestHarborDeployment(t *testing.T) {
 			t.Errorf("Expected resource %s not found in plan output", resource)
 		}
 	}
-
-	// Note: We're not actually applying the changes or destroying resources in this test
-	// as it could incur real costs and take a long time. In a real CI/CD pipeline,
-	// you might want to apply to a sandboxed account and then destroy.
 }
 
 func findRootDir() (string, error) {
