@@ -1,3 +1,4 @@
+---
 exclude:
   - aws-eks-no-public-cluster-access
   - aws-eks-no-public-cluster-access-to-cidr
@@ -26,3 +27,6 @@ custom:
   aws-ec2-require-vpc-flow-logs-for-all-vpcs:
     description: "VPC Flow Logs are not required for this specific deployment but was enabled in vpc.tf."
     severity: LOW
+
+# Force tfsec to recognize the config file
+force_enforce_exclude: true
