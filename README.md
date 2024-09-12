@@ -2,21 +2,15 @@
 
 Easily deploy Harbor, an open-source container registry and vulnerability scanning platform, on Amazon EKS using OpenTofu.
 
-## Features
-
-- One-command deployment of Harbor on Amazon EKS
-- Scalable architecture using EFS for persistent storage
-- Secure configuration with RDS for database backend
-- Automated networking and load balancing setup
-- Comprehensive test suite and CI/CD integration
-
 ## Features and Benefits
 
-- **Effortless Deployment**: Get a production ready Harbor up and running on Amazon EKS with just a few commands
+- **Effortless Deployment**: Get a production-ready Harbor up and running on Amazon EKS with just a few commands
+- **Scalable Architecture**: Uses EFS (Elastic File System) for persistent storage, allowing easy growth
+- **Secure Configuration**: Utilizes RDS for a robust and secure database backend
 - **Smart Load Balancing**: Implements AWS Load Balancer Controller for smooth traffic management
-- **Peace of Mind**: Includes a comprehensive test suite to ensure everything's working as it should
-- **Budget-Friendly**: Efficiently uses AWS services to keep your costs in check
-- **Your Harbor, Your Way**: Easily customizable to fit your organization's unique needs
+- **Comprehensive Testing**: Includes a test suite and CI/CD integration for reliability
+- **Budget-Friendly**: Efficiently uses AWS services to optimize costs
+- **Customizable**: Easily adaptable to fit your organization's unique needs
 - **Best Practices Baked In**: Implements AWS and Kubernetes best practices right out of the box
 
 ## Quick Start
@@ -31,20 +25,12 @@ tofu apply
 
 ## Documentation
 
-For detailed information about setup, configuration, and usage, please visit our [full documentation](https://your-mkdocs-site-url.com).
-
-## Contributing
-
-We welcome contributions! Please see our [Contributing Guide](docs/CONTRIBUTING.md) for more details.
+For detailed information about setup, configuration, and usage, please visit our [full documentation](https://devsecflow.github.io/deploy-harbor-eks/).
 
 ## Support
 
-If you encounter any issues or have questions, please [open an issue](https://github.com/devsecflow/deploy-harbor-eks/issues) or contact us at [devsecflow.com](https://devsecflow.com).
+Need help? [Open an issue](https://github.com/devsecflow/deploy-harbor-eks/issues) or contact us at [devsecflow.com](https://devsecflow.com).
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## About DevSecFlow
-
-This project is maintained by DevSecFlow. Learn more about us and our services at [devsecflow.com](https://devsecflow.com).
