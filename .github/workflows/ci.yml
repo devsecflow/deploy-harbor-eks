@@ -19,6 +19,8 @@ jobs:
         run: |
           LATEST_VERSION=$(curl -s https://api.github.com/repos/opentofu/opentofu/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//')
           curl -Lo ./tofu.tar.gz "https://github.com/opentofu/opentofu/releases/download/v${LATEST_VERSION}/tofu_${LATEST_VERSION}_linux_amd64.tar.gz"
+          rm -f tofu  # Remove any existing file named "tofu"
+          rm -rf tofu/  # Remove any existing directory named "tofu"
           tar -xzf tofu.tar.gz
           sudo mv tofu /usr/local/bin/
           rm tofu.tar.gz
