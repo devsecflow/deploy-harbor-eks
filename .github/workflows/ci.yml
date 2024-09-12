@@ -19,9 +19,9 @@ jobs:
       run: |
         LATEST_VERSION=$(curl -s https://api.github.com/repos/opentofu/opentofu/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//')
         curl -Lo ./tofu.tar.gz "https://github.com/opentofu/opentofu/releases/download/v${LATEST_VERSION}/tofu_${LATEST_VERSION}_linux_amd64.tar.gz"
-        tar -xzf tofu.tar.gz
+        tar -xzf tofu.tar.gz --overwrite
         sudo mv tofu /usr/local/bin/
-        rm tofu.tar.gz
+        rm -rf tofu tofu.tar.gz 
     - name: Install tflint
       run: |
         curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
@@ -52,6 +52,7 @@ jobs:
       uses: aquasecurity/tfsec-action@v1.0.0
       with:
         working_directory: ./tofu
+        additional_args: '--config-file=../.tfsec.yml'
 
   lint:
     runs-on: ubuntu-latest
