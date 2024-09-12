@@ -74,7 +74,7 @@ func findRootDir() (string, error) {
 
 	for {
 		if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
-			return dir, nil
+			return filepath.Dir(dir), nil // Return the parent of the directory containing go.mod
 		}
 		parent := filepath.Dir(dir)
 		if parent == dir {
