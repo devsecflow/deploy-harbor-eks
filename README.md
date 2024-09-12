@@ -1,4 +1,3 @@
-readme
 # Harbor on EKS: Streamlined Deployment for Vulnerability Scanning
 
 Easily deploy Harbor, an open-source container registry and vulnerability scanning platform, on Amazon EKS using OpenTofu.
