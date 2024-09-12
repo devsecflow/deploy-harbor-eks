@@ -11,10 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.21'
       - name: Set up OpenTofu
         run: |
           LATEST_VERSION=$(curl -s https://api.github.com/repos/opentofu/opentofu/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//')
@@ -23,48 +19,25 @@ jobs:
           tar -xzf tofu.tar.gz -C tofu_temp
           sudo mv tofu_temp/tofu /usr/local/bin/
           rm -rf tofu_temp tofu.tar.gz
-      - name: Install tflint
+
+      - name: Debug directory structure
         run: |
-          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
-      - name: Install terraform-docs
-        run: |
-          curl -Lo ./terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.16.0/terraform-docs-v0.16.0-linux-amd64.tar.gz
-          tar -xzf terraform-docs.tar.gz
-          chmod +x terraform-docs
-          sudo mv terraform-docs /usr/local/bin/
-          rm terraform-docs.tar.gz
+          echo "Current directory:"
+          pwd
+          echo "Contents of current directory:"
+          ls -la
+          echo "Contents of parent directory:"
+          ls -la ..
+          echo "Contents of /home/runner/work/deploy-harbor-eks/deploy-harbor-eks:"
+          ls -la /home/runner/work/deploy-harbor-eks/deploy-harbor-eks
+          echo "Checking if 'tofu' is in PATH:"
+          which tofu
+
       - name: Run tests
         run: |
           cd test
+          echo "Current directory after cd:"
+          pwd
+          echo "Contents of current directory:"
+          ls -la
           go test -v ./...
-
-  # security:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Run Snyk to check for vulnerabilities
-  #       uses: snyk/actions/iac@master
-  #       env:
-  #         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-  #       with:
-  #         command: test
-  #         args: ./tofu
-  #     - name: Run tfsec
-  #       uses: aquasecurity/tfsec-action@v1.0.0
-  #       with:
-  #         working_directory: ./tofu
-  #         additional_args: '--config-file=../.tfsec.yml --soft-fail'
-
-  # lint:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Run golangci-lint
-  #       uses: golangci/golangci-lint-action@v3
-  #       with:
-  #         working-directory: test
-  #     - name: Run markdown lint
-  #       uses: avto-dev/markdown-lint@v1
-  #       with:
-  #         config: '.markdownlint.json'
-  #         args: '**/*.md'
