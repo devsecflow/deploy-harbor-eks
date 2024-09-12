@@ -1,0 +1,98 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.20'
+
+    - name: Set up OpenTofu
+      run: |
+        LATEST_VERSION=$(curl -s https://api.github.com/repos/opentofu/opentofu/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//')
+        curl -Lo ./tofu.tar.gz "https://github.com/opentofu/opentofu/releases/download/v${LATEST_VERSION}/tofu_${LATEST_VERSION}_linux_amd64.tar.gz"
+        tar -xzf tofu.tar.gz
+        chmod +x tofu
+        sudo mv tofu /usr/local/bin/
+        rm tofu.tar.gz
+
+    - name: Install tflint
+      run: |
+        curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+
+    - name: Install terraform-docs
+      run: |
+        curl -Lo ./terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.16.0/terraform-docs-v0.16.0-linux-amd64.tar.gz
+        tar -xzf terraform-docs.tar.gz
+        chmod +x terraform-docs
+        sudo mv terraform-docs /usr/local/bin/
+        rm terraform-docs.tar.gz
+
+    - name: Run tests
+      run: |
+        cd test
+        go test -v ./...
+
+    - name: OpenTofu Format Check
+      run: tofu fmt -check -recursive ./tofu
+
+    - name: OpenTofu Validate
+      run: |
+        cd tofu
+        tofu init -backend=false
+        tofu validate
+
+    - name: Run tflint
+      run: |
+        cd tofu
+        tflint
+
+    - name: Check documentation
+      run: |
+        terraform-docs markdown table --output-file README.md --output-mode inject ./tofu
+        git diff --exit-code README.md || (echo "README.md is out of date. Run 'terraform-docs markdown table --output-file README.md --output-mode inject ./tofu' and commit the changes." && exit 1)
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/iac@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        command: test
+        args: ./tofu
+
+    - name: Run tfsec
+      uses: aquasecurity/tfsec-action@v1.0.0
+      with:
+        working_directory: ./tofu
+        config_file: ../.tfsec.yml
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Run golangci-lint
+      uses: golangci/golangci-lint-action@v3
+      with:
+        working-directory: test
+
+    - name: Run markdown lint
+      uses: avto-dev/markdown-lint@v1
+      with:
+        config: '.markdownlint.json'
+        args: '**/*.md'

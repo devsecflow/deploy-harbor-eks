@@ -1,0 +1,21 @@
+---
+exclude:
+  - aws-eks-no-public-cluster-access
+  - aws-eks-no-public-cluster-access-to-cidr
+  - aws-ec2-no-public-egress-sgr
+  - aws-rds-enable-performance-insights
+
+# Explanations for exclusions
+custom:
+  aws-eks-no-public-cluster-access:
+    description: "Public access is required for our Harbor deployment"
+    severity: LOW
+  aws-eks-no-public-cluster-access-to-cidr:
+    description: "Public access is required for our Harbor deployment"
+    severity: LOW
+  aws-ec2-no-public-egress-sgr:
+    description: "Broad egress is needed for Harbor's functionality"
+    severity: LOW
+  aws-rds-enable-performance-insights:
+    description: "Performance Insights not critical for this deployment"
+    severity: LOW

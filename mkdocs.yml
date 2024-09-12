@@ -1,0 +1,11 @@
+site_name: Harbor on EKS Deployment
+nav:
+  - Home: index.md
+  - Prerequisites: PREREQUISITES.md
+  - Configuration: CONFIGURATION.md
+  - Testing: TESTING.md
+  - Security: SECURITY.md
+  - Branching Strategy: BRANCHING_STRATEGY.md
+  - Contributing: CONTRIBUTING.md
+  - About DevSecFlow: ABOUT_DEVSECFLOW.md
+theme: readthedocs
