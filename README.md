@@ -94,7 +94,7 @@ Key variables:
 2. Set up environment variables:
 
    ```bash
-   export TF_VAR_db_password=$(openssl rand -base64 16)
+   export TF_VAR_db_password=$(openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)
    ```
 
 3. Initialize and apply:
