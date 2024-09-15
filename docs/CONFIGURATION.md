@@ -36,7 +36,7 @@ After successful deployment, configure your domain's DNS:
 1. Get the ELB address:
 
    ```bash
-   kubectl get ingress -n harbor
+   kubectl get ingress -n default
    ```
 
 2. Create a CNAME record in your domain's DNS settings:
