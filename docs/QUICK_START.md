@@ -1,44 +1,74 @@
 # Quick Start Guide
 
-To deploy Harbor on EKS using this project:
+To deploy Harbor on EKS using this project, follow the steps below. You can use either **OpenTofu** or **Terraform** depending on your preference.
 
-1. Clone the repository:
+## 1. Clone the Repository
 
    ```bash
    git clone https://github.com/devsecflow/deploy-harbor-eks.git
    cd deploy-harbor-eks
    ```
 
-2. Set up environment variables:
+## 2. Choose Your Tool: OpenTofu or Terraform
 
-   ```bash
-   export TF_VAR_db_password=$(openssl rand -base64 16)
-   ```
+### **Option 1: OpenTofu**
 
-3. Initialize OpenTofu:
+1. Navigate to the `tofu` directory:
 
    ```bash
    cd tofu
+   ```
+
+2. Initialize OpenTofu:
+
+   ```bash
    tofu init
    ```
 
-4. Create a `terraform.tfvars` file with your specific values:
+### **Option 2: Terraform (Alternative)**
 
-   ```text
+1. Navigate to the `terraform` directory:
+
+   ```bash
+   cd terraform
+   ```
+
+2. Initialize Terraform:
+
+   ```bash
+   terraform init
+   ```
+
+## 3. Create a `terraform.tfvars` File
+
+Create the `terraform.tfvars` file with your specific values, applicable to both OpenTofu and Terraform:
+
+   ```hcl
    region       = "us-west-2"
    cluster_name = "your-cluster-name"
    cert_arn     = "arn:aws:acm:us-west-2:your-account-id:certificate/your-certificate-id"
    domain_name  = "harbor.yourdomain.com"
+   vpc_cidr     = "10.0.0.0/16"
    ```
 
-5. Review and apply the configuration:
+## 4. Review and Apply the Configuration
+
+### **For OpenTofu**
 
    ```bash
-   
    tofu plan
    tofu apply
    ```
 
-6. Follow the post-deployment steps in POST_DEPLOYMENT.md.
+### **For Terraform**
+
+   ```bash
+   terraform plan
+   terraform apply
+   ```
+
+## 5. Post-Deployment
+
+After the deployment, follow the post-deployment steps in the `POST_DEPLOYMENT.md` file for additional configuration and setup.
 
 For more detailed instructions, refer to the full documentation.

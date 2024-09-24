@@ -8,9 +8,9 @@ resource "helm_release" "harbor" {
   # Use a template file for Harbor values
   values = [templatefile("harbor-values-template.yaml", {
     cert_arn     = var.cert_arn,
-    domain_name  = var.domain_name
-    db_host      = module.db.db_instance_address
-    db_password  = var.db_password
+    domain_name  = var.domain_name,
+    db_host      = module.db.db_instance_address,
+    db_password  = local.db_password,
     cluster_name = var.cluster_name
   })]
 

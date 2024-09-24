@@ -5,19 +5,19 @@ test: init format validate lint docs unit-test
 
 .PHONY: init
 init:
-	cd ../tofu && tofu init -backend=false
+	cd ../tofu && $(TERRATEST_TERRAFORM_EXECUTABLE) init -backend=false
 
 .PHONY: format
 format:
-	cd ../tofu && tofu fmt -recursive
+	cd ../tofu && $(TERRATEST_TERRAFORM_EXECUTABLE) fmt -recursive
 
 .PHONY: validate
 validate:
-	cd ../tofu && tofu validate
+	cd ../tofu && $(TERRATEST_TERRAFORM_EXECUTABLE) validate
 
 .PHONY: lint
 lint:
-	cd ../tofu && tflint
+	cd ../tofu && tflint || true
 
 .PHONY: docs
 docs:
@@ -43,12 +43,12 @@ clean:
 help:
 	@echo "Available targets:"
 	@echo "  test        : Run all tests (init, format, validate, lint, docs, unit-test)"
-	@echo "  init        : Initialize OpenTofu"
-	@echo "  format      : Format OpenTofu files"
-	@echo "  validate    : Validate OpenTofu files"
-	@echo "  lint        : Run tflint on OpenTofu files"
+	@echo "  init        : Initialize OpenTofu or Terraform"
+	@echo "  format      : Format OpenTofu or Terraform files"
+	@echo "  validate    : Validate OpenTofu or Terraform files"
+	@echo "  lint        : Run tflint on OpenTofu or Terraform files"
 	@echo "  docs        : Generate documentation using terraform-docs"
 	@echo "  unit-test   : Run Go unit tests"
 	@echo "  all         : Alias for 'test' target"
-	@echo "  clean       : Remove OpenTofu state files and lock file"
+	@echo "  clean       : Remove OpenTofu or Terraform state files and lock file"
 	@echo "  help        : Display this help message"

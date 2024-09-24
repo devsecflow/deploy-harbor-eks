@@ -8,16 +8,30 @@ We've included a comprehensive test suite to keep everything ship-shape. Here's 
    cd test
    ```
 
-2. Run the test suite:
+2. Set the environment variable to specify whether you're using OpenTofu or Terraform:
+
+   - For **OpenTofu**:
+
+     ```bash
+     export TERRATEST_TERRAFORM_EXECUTABLE=tofu
+     ```
+
+   - For **Terraform**:
+
+     ```bash
+     export TERRATEST_TERRAFORM_EXECUTABLE=terraform
+     ```
+
+3. Run the test suite:
 
    ```bash
    make test
    ```
 
-This will run through a series of checks:
+This will run through a series of checks based on the tool you've selected:
 
-- Format checking with `tofu fmt`
-- Configuration validation with `tofu validate`
+- Format checking with `tofu fmt` or `terraform fmt`
+- Configuration validation with `tofu validate` or `terraform validate`
 - Static code analysis with `tflint`
 - Documentation generation with `terraform-docs` (if you have it installed)
 - Unit tests with Go
@@ -27,9 +41,9 @@ This will run through a series of checks:
 We've implemented a comprehensive CI pipeline using GitHub Actions. On every push and pull request, our workflow:
 
 - Runs Go tests
-- Checks OpenTofu formatting
-- Validates OpenTofu configurations
-- Runs tflint for additional OpenTofu linting
+- Checks Terraform or OpenTofu formatting
+- Validates Terraform or OpenTofu configurations
+- Runs `tflint` for additional linting
 - Ensures documentation is up-to-date
 - Performs security scans using Snyk and tfsec
 - Lints Go code using golangci-lint
@@ -45,29 +59,47 @@ If you're unsure about how to test a particular component, feel free to open an 
 
 ## Running Individual Tests
 
-If you need to run specific tests or checks, you can use the following commands:
+If you need to run specific tests or checks, you can use the following commands based on your chosen tool.
 
 ### Format Checking
 
-To check the formatting of your OpenTofu files:
+To check the formatting of your OpenTofu or Terraform files:
 
-```bash
-tofu fmt -check -recursive ../tofu
-```
+- For **OpenTofu**:
+
+  ```bash
+  tofu fmt -check -recursive ../tofu
+  ```
+
+- For **Terraform**:
+
+  ```bash
+  terraform fmt -check -recursive ../tofu
+  ```
 
 ### Configuration Validation
 
-To validate your OpenTofu configuration:
+To validate your configuration:
 
-```bash
-cd ../tofu
-tofu init -backend=false
-tofu validate
-```
+- For **OpenTofu**:
+
+  ```bash
+  cd ../tofu
+  tofu init -backend=false
+  tofu validate
+  ```
+
+- For **Terraform**:
+
+  ```bash
+  cd ../tofu
+  terraform init -backend=false
+  terraform validate
+  ```
 
 ### Static Code Analysis
 
-To run tflint on your OpenTofu files:
+To run `tflint` on your files:
 
 ```bash
 cd ../tofu
@@ -76,7 +108,7 @@ tflint
 
 ### Documentation Generation
 
-To generate documentation using terraform-docs:
+To generate documentation using `terraform-docs`:
 
 ```bash
 terraform-docs markdown table --output-file ../README.md --output-mode inject ../tofu

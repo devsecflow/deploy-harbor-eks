@@ -7,30 +7,49 @@ on:
     branches: [main]
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      code_changed: ${{ steps.filter.outputs.code }}
+      test_changed: ${{ steps.filter.outputs.test }}
+      terraform_changed: ${{ steps.filter.outputs.terraform }}
+      docs_changed: ${{ steps.filter.outputs.docs }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Filter files
+        id: filter
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            code:
+              - 'src/**'
+              - '**/*.go'
+            test:
+              - 'test/**'
+            terraform:
+              - '**/*.tf'
+              - 'tofu/**'
+            docs:
+              - '**/*.md'
+              - 'docs/**'
+
   test:
     runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.code_changed == 'true' || needs.changes.outputs.test_changed == 'true'
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: us-west-2
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: '1.21'
-      - name: Set up OpenTofu
-        uses: opentofu/setup-opentofu@v1
-      - name: Install tflint
-        run: |
-          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
-      - name: Install terraform-docs
-        run: |
-          curl -Lo ./terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.16.0/terraform-docs-v0.16.0-linux-amd64.tar.gz
-          tar -xzf terraform-docs.tar.gz
-          chmod +x terraform-docs
-          sudo mv terraform-docs /usr/local/bin/
-          rm terraform-docs.tar.gz
+
       - name: Run tests
         run: |
           cd test
@@ -38,8 +57,11 @@ jobs:
 
   security:
     runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.terraform_changed == 'true'
     steps:
       - uses: actions/checkout@v4
+
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/iac@master
         env:
@@ -47,6 +69,7 @@ jobs:
         with:
           command: test
           args: ./tofu
+
       - name: Run tfsec
         uses: aquasecurity/tfsec-action@v1.0.0
         with:
@@ -55,33 +78,41 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    needs: changes
     steps:
       - uses: actions/checkout@v4
+
       - name: Run golangci-lint
+        if: needs.changes.outputs.code_changed == 'true'
         uses: golangci/golangci-lint-action@v3
         with:
           working-directory: test
+
       - name: Run markdown lint
+        if: needs.changes.outputs.docs_changed == 'true'
         uses: avto-dev/markdown-lint@v1
         with:
           config: '.markdownlint.json'
           args: '**/*.md'
-  
+
   deploy-docs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    needs: [test, security, lint]
-    if: github.ref == 'refs/heads/main'
+    needs: [test, security, lint, changes]
+    if: github.ref == 'refs/heads/main' && needs.changes.outputs.docs_changed == 'true'
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
+
       - name: Install dependencies
         run: |
           pip install mkdocs
+
       - name: Build and deploy documentation
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
