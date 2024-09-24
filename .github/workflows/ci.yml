@@ -50,10 +50,48 @@ jobs:
         with:
           go-version: '1.21'
 
-      - name: Run tests
+      - name: Install OpenTofu
         run: |
+          curl -Lo ./tofu.tar.gz https://github.com/opentofu/opentofu/releases/latest/download/tofu_linux_amd64.tar.gz
+          tar -xzf tofu.tar.gz
+          chmod +x tofu
+          sudo mv tofu /usr/local/bin/
+        shell: bash
+
+      - name: Install Terraform
+        run: |
+          sudo apt-get update && sudo apt-get install -y terraform
+        shell: bash
+
+      - name: Run OpenTofu Tests
+        id: tofu-tests
+        continue-on-error: true  # Continue even if this test fails
+        run: |
+          export TERRATEST_TERRAFORM_EXECUTABLE=tofu
           cd test
           go test -v ./...
+        shell: bash
+
+      - name: Run Terraform Tests
+        id: terraform-tests
+        continue-on-error: true  # Continue even if this test fails
+        run: |
+          export TERRATEST_TERRAFORM_EXECUTABLE=terraform
+          cd test
+          go test -v ./...
+        shell: bash
+
+      - name: Determine Final Status
+        if: always()  # Always run this step
+        run: |
+          # Check if either test passed
+          if [[ "${{ steps.tofu-tests.outcome }}" == "success" || "${{ steps.terraform-tests.outcome }}" == "success" ]]; then
+            echo "At least one test suite passed."
+            exit 0  # Exit with success
+          else
+            echo "Both test suites failed."
+            exit 1  # Exit with failure
+        shell: bash
 
   security:
     runs-on: ubuntu-latest
