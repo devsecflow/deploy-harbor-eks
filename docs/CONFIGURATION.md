@@ -20,7 +20,7 @@ vpc_cidr     = "10.0.0.0/16"
 - `domain_name`: Domain name for Harbor
 - `vpc_cidr`: Your VPC CIDR block
 
-### Notes:
+### Notes
 
 - You can use either **OpenTofu** or **Terraform** to manage this configuration. Terraform is a more mature and stable option if you're concerned about potential future changes in OpenTofu, which is still in development.
 
