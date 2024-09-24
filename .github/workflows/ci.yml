@@ -52,10 +52,8 @@ jobs:
 
       - name: Install OpenTofu
         run: |
-          curl -Lo ./tofu.tar.gz https://github.com/opentofu/opentofu/releases/latest/download/tofu_linux_amd64.tar.gz
-          tar -xzf tofu.tar.gz
-          chmod +x tofu
-          sudo mv tofu /usr/local/bin/
+          curl -Lo ./tofu.deb https://github.com/opentofu/opentofu/releases/download/v1.8.2/tofu_1.8.2_amd64.deb
+          sudo dpkg -i ./tofu.deb
         shell: bash
 
       - name: Install Terraform
