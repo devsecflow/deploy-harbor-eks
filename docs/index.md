@@ -26,9 +26,12 @@ This project provides an automated, infrastructure-as-code solution for deployin
 ```bash
 git clone https://github.com/devsecflow/deploy-harbor-eks.git
 cd deploy-harbor-eks/tofu
-export TF_VAR_db_password=$(openssl rand -base64 16)
 tofu init
 tofu apply
+
+alternatively try
+terraform init
+terraform apply
 ```
 
 ## Documentation
