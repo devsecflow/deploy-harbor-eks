@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Branching Strategy - Harbor on EKS Deployment</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Branching Strategy";
+        var mkdocs_page_input_path = "BRANCHING_STRATEGY.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Harbor on EKS Deployment
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../PREREQUISITES/">Prerequisites</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CONFIGURATION/">Configuration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../TESTING/">Testing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SECURITY/">Security</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Branching Strategy</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#core-principles">Core Principles</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#detailed-workflow">Detailed Workflow</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#main-branch">Main Branch</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#feature-branches">Feature Branches</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#working-in-branches">Working in Branches</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pull-requests">Pull Requests</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#continuous-integration">Continuous Integration</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#merging">Merging</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#releases">Releases</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#hotfixes">Hotfixes</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#benefits-of-this-strategy">Benefits of This Strategy</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING/">Contributing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../ABOUT_DEVSECFLOW/">About DevSecFlow</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Harbor on EKS Deployment</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Branching Strategy</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="branching-strategy">Branching Strategy</h1>
+<p>For our open-source project, we've adopted a simplified GitHub Flow-inspired strategy. This approach balances flexibility with best practices, making it easier for contributors while maintaining code quality.</p>
+<h2 id="core-principles">Core Principles</h2>
+<ol>
+<li>The <code>main</code> branch is always deployable.</li>
+<li>Work is done in feature branches.</li>
+<li>Pull Requests (PRs) are the unit of review and integration.</li>
+<li>Continuous Integration (CI) runs on all branches and PRs.</li>
+<li>Releases are tagged directly from <code>main</code>.</li>
+</ol>
+<h2 id="detailed-workflow">Detailed Workflow</h2>
+<h3 id="main-branch">Main Branch</h3>
+<ul>
+<li><code>main</code>: This branch always contains production-ready code.</li>
+<li>Direct commits to <code>main</code> are not allowed; changes come through Pull Requests.</li>
+</ul>
+<h3 id="feature-branches">Feature Branches</h3>
+<ul>
+<li>Create a branch from <code>main</code> for each new feature, bug fix, or improvement.</li>
+<li>Use a clear, descriptive name for your branch, e.g.:</li>
+<li><code>feature/add-efs-encryption</code></li>
+<li><code>bugfix/rds-connection-issue</code></li>
+<li><code>docs/update-deployment-guide</code></li>
+</ul>
+<h3 id="working-in-branches">Working in Branches</h3>
+<ol>
+<li>Create your branch from the latest <code>main</code>.</li>
+<li>Make your changes, committing often with clear, descriptive commit messages.</li>
+<li>Push your branch to the remote repository regularly.</li>
+<li>Open a Pull Request early for discussion, marking it as "Draft" if it's not ready for review.</li>
+</ol>
+<h3 id="pull-requests">Pull Requests</h3>
+<ul>
+<li>When your work is ready for review, open a Pull Request (or mark it "Ready for Review" if it was a draft).</li>
+<li>Provide a clear description of the changes and the motivation behind them.</li>
+<li>Link any related issues in the PR description.</li>
+<li>Engage in code review discussions.</li>
+<li>Make requested changes in new commits in your branch.</li>
+<li>Once approved and all CI checks pass, the PR can be merged.</li>
+</ul>
+<h3 id="continuous-integration">Continuous Integration</h3>
+<ul>
+<li>Our CI pipeline runs on all branches and Pull Requests.</li>
+<li>All checks must pass before a PR can be merged.</li>
+<li>CI includes automated tests, linting, and security scans.</li>
+</ul>
+<h3 id="merging">Merging</h3>
+<ul>
+<li>We use "Squash and Merge" for most PRs to keep the <code>main</code> branch history clean.</li>
+<li>The PR title becomes the commit message on <code>main</code>, so ensure it's descriptive.</li>
+</ul>
+<h3 id="releases">Releases</h3>
+<ul>
+<li>We tag releases directly from the <code>main</code> branch.</li>
+<li>Use semantic versioning for release tags (e.g., v1.2.3).</li>
+<li>Create a GitHub Release for each tag, detailing the changes.</li>
+</ul>
+<h3 id="hotfixes">Hotfixes</h3>
+<ul>
+<li>For urgent fixes to production, create a <code>hotfix/</code> branch from the latest release tag.</li>
+<li>Follow the normal PR process, but merge directly to <code>main</code>.</li>
+<li>After merging, immediately create a new release with an incremented patch version.</li>
+</ul>
+<h2 id="best-practices">Best Practices</h2>
+<ol>
+<li>Keep branches short-lived. Aim to merge within a few days.</li>
+<li>Regularly sync your feature branch with <code>main</code> to reduce merge conflicts.</li>
+<li>Write clear, concise commit messages.</li>
+<li>Use draft PRs for work-in-progress to signal early and get feedback.</li>
+<li>Engage actively in code reviews, both as an author and a reviewer.</li>
+</ol>
+<h2 id="benefits-of-this-strategy">Benefits of This Strategy</h2>
+<ul>
+<li>Simplicity: Easy to understand and follow for new contributors.</li>
+<li>Flexibility: Accommodates various contribution patterns and frequencies.</li>
+<li>Continuous Delivery: Always having a deployable <code>main</code> branch enables frequent releases.</li>
+<li>Quality Control: All changes go through PR review and CI checks.</li>
+<li>Community-Friendly: Aligns well with GitHub's features and open-source collaboration patterns.</li>
+</ul>
+<p>This strategy aims to strike a balance between structure and flexibility, making it easier for contributors to participate while maintaining high code quality standards. It's designed to be inclusive of both frequent and occasional contributors, which is crucial for open-source projects.</p>
+<p>Remember, while this is our recommended workflow, we're open to adjusting it based on the project's and community's needs. If you have suggestions for improvements, please open an issue for discussion.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../SECURITY/" class="btn btn-neutral float-left" title="Security"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../CONTRIBUTING/" class="btn btn-neutral float-right" title="Contributing">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../SECURITY/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../CONTRIBUTING/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Quick Start Guide - Harbor on EKS Deployment</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Quick Start Guide";
+        var mkdocs_page_input_path = "QUICK_START.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Harbor on EKS Deployment
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../PREREQUISITES/">Prerequisites</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CONFIGURATION/">Configuration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../TESTING/">Testing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SECURITY/">Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../BRANCHING_STRATEGY/">Branching Strategy</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING/">Contributing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../ABOUT_DEVSECFLOW/">About DevSecFlow</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Harbor on EKS Deployment</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Quick Start Guide</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="quick-start-guide">Quick Start Guide</h1>
+<p>To deploy Harbor on EKS using this project, follow the steps below. You can use either <strong>OpenTofu</strong> or <strong>Terraform</strong> depending on your preference.</p>
+<h2 id="1-clone-the-repository">1. Clone the Repository</h2>
+<p><code>bash
+   git clone https://github.com/devsecflow/deploy-harbor-eks.git
+   cd deploy-harbor-eks</code></p>
+<h2 id="2-choose-your-tool-opentofu-or-terraform">2. Choose Your Tool: OpenTofu or Terraform</h2>
+<h3 id="option-1-opentofu"><strong>Option 1: OpenTofu</strong></h3>
+<ol>
+<li>Navigate to the <code>tofu</code> directory:</li>
+</ol>
+<p><code>bash
+   cd tofu</code></p>
+<ol>
+<li>Initialize OpenTofu:</li>
+</ol>
+<p><code>bash
+   tofu init</code></p>
+<h3 id="option-2-terraform-alternative"><strong>Option 2: Terraform (Alternative)</strong></h3>
+<ol>
+<li>Navigate to the <code>terraform</code> directory:</li>
+</ol>
+<p><code>bash
+   cd terraform</code></p>
+<ol>
+<li>Initialize Terraform:</li>
+</ol>
+<p><code>bash
+   terraform init</code></p>
+<h2 id="3-create-a-terraformtfvars-file">3. Create a <code>terraform.tfvars</code> File</h2>
+<p>Create the <code>terraform.tfvars</code> file with your specific values, applicable to both OpenTofu and Terraform:</p>
+<p><code>hcl
+   region       = "us-west-2"
+   cluster_name = "your-cluster-name"
+   cert_arn     = "arn:aws:acm:us-west-2:your-account-id:certificate/your-certificate-id"
+   domain_name  = "harbor.yourdomain.com"
+   vpc_cidr     = "10.0.0.0/16"</code></p>
+<h2 id="4-review-and-apply-the-configuration">4. Review and Apply the Configuration</h2>
+<h3 id="for-opentofu"><strong>For OpenTofu</strong></h3>
+<p><code>bash
+   tofu plan
+   tofu apply</code></p>
+<h3 id="for-terraform"><strong>For Terraform</strong></h3>
+<p><code>bash
+   terraform plan
+   terraform apply</code></p>
+<h2 id="5-post-deployment">5. Post-Deployment</h2>
+<p>After the deployment, follow the post-deployment steps in the <code>POST_DEPLOYMENT.md</code> file for additional configuration and setup.</p>
+<p>For more detailed instructions, refer to the full documentation.</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Configuration - Harbor on EKS Deployment</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Configuration";
+        var mkdocs_page_input_path = "CONFIGURATION.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Harbor on EKS Deployment
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../PREREQUISITES/">Prerequisites</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Configuration</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#key-variables">Key Variables</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#authentication-configuration">Authentication Configuration</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#database-authentication-default">Database Authentication (Default)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#ldap-authentication">LDAP Authentication</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#oidc-authentication">OIDC Authentication</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#applying-configuration-changes">Applying Configuration Changes</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#opentofu">OpenTofu</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#terraform-as-an-alternative-to-opentofu">Terraform (as an alternative to OpenTofu)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#security-recommendations">Security Recommendations</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../TESTING/">Testing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SECURITY/">Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../BRANCHING_STRATEGY/">Branching Strategy</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING/">Contributing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../ABOUT_DEVSECFLOW/">About DevSecFlow</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Harbor on EKS Deployment</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Configuration</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="configuration-guide">Configuration Guide</h1>
+<p>This guide explains how to configure your Harbor on EKS deployment, including key variables and authentication options. Both OpenTofu and Terraform can be used for this setup.</p>
+<h2 id="key-variables">Key Variables</h2>
+<p>Create a <code>terraform.tfvars</code> file in the <code>tofu</code> or <code>terraform</code> directory with your specific values:</p>
+<pre><code class="language-hcl">region       = &quot;us-west-2&quot;
+cluster_name = &quot;my-harbor-cluster&quot;
+cert_arn     = &quot;arn:aws:acm:us-west-2:123456789012:certificate/12345678-1234-1234-1234-123456789012&quot;
+domain_name  = &quot;harbor.example.com&quot;
+vpc_cidr     = &quot;10.0.0.0/16&quot;
+</code></pre>
+<ul>
+<li><code>region</code>: AWS region for deployment</li>
+<li><code>cluster_name</code>: Name for your EKS cluster</li>
+<li><code>cert_arn</code>: ARN of the ACM certificate for HTTPS</li>
+<li><code>domain_name</code>: Domain name for Harbor</li>
+<li><code>vpc_cidr</code>: Your VPC CIDR block</li>
+</ul>
+<h3 id="notes">Notes</h3>
+<ul>
+<li>You can use either <strong>OpenTofu</strong> or <strong>Terraform</strong> to manage this configuration. Terraform is a more mature and stable option if you're concerned about potential future changes in OpenTofu, which is still in development.</li>
+</ul>
+<h2 id="authentication-configuration">Authentication Configuration</h2>
+<p>Harbor supports multiple authentication methods. You can configure the authentication mode in the <code>harbor.tf</code> file, whether you're using OpenTofu or Terraform. Here are the options:</p>
+<h3 id="database-authentication-default">Database Authentication (Default)</h3>
+<p>This is enabled by default. No additional configuration is needed.</p>
+<h3 id="ldap-authentication">LDAP Authentication</h3>
+<p>To enable LDAP authentication, update the <code>auth</code> section in <code>harbor.tf</code> as follows:</p>
+<pre><code class="language-hcl">auth = {
+  mode = &quot;ldap_auth&quot;
+  ldap = {
+    enabled        = true
+    url            = &quot;ldaps://your-ldap-server.com&quot;
+    searchDN       = &quot;cn=admin,dc=example,dc=com&quot;
+    searchPassword = &quot;your-ldap-admin-password&quot;
+    baseDN         = &quot;dc=example,dc=com&quot;
+    filter         = &quot;(objectClass=person)&quot;
+    uid            = &quot;uid&quot;
+    scope          = &quot;2&quot;
+    timeout        = 5
+  }
+}
+</code></pre>
+<p>Adjust the LDAP settings according to your LDAP server configuration.</p>
+<h3 id="oidc-authentication">OIDC Authentication</h3>
+<p>To enable OIDC authentication, update the <code>auth</code> section in <code>harbor.tf</code> as follows:</p>
+<pre><code class="language-hcl">auth = {
+  mode = &quot;oidc_auth&quot;
+  oidc = {
+    enabled      = true
+    name         = &quot;Your OIDC Provider&quot;
+    endpoint     = &quot;https://your-oidc-provider.com&quot;
+    clientId     = &quot;your-client-id&quot;
+    clientSecret = &quot;your-client-secret&quot;
+    groupsClaim  = &quot;groups&quot;
+    adminGroup   = &quot;harbor-admins&quot;
+    verifyToken  = false
+  }
+}
+</code></pre>
+<p>Replace the OIDC settings with your OIDC provider's configuration.</p>
+<h2 id="applying-configuration-changes">Applying Configuration Changes</h2>
+<p>After making changes to your configuration, you’ll need to review and apply those changes based on whether you're using <strong>OpenTofu</strong> or <strong>Terraform</strong>:</p>
+<h3 id="opentofu">OpenTofu</h3>
+<ol>
+<li>Review your changes:</li>
+</ol>
+<p><code>bash
+   tofu plan</code></p>
+<ol>
+<li>Apply the changes:</li>
+</ol>
+<p><code>bash
+   tofu apply</code></p>
+<h3 id="terraform-as-an-alternative-to-opentofu">Terraform (as an alternative to OpenTofu)</h3>
+<ol>
+<li>Review your changes:</li>
+</ol>
+<p><code>bash
+   terraform plan</code></p>
+<ol>
+<li>Apply the changes:</li>
+</ol>
+<p><code>bash
+   terraform apply</code></p>
+<p><em>Note: If you encounter any issues with OpenTofu due to its ongoing development, Terraform provides a more stable alternative for managing the configuration and applying changes.</em></p>
+<h2 id="security-recommendations">Security Recommendations</h2>
+<p>Always handle sensitive information like passwords, client secrets, and tokens securely. It's recommended to store these in AWS Secrets Manager or using environment variables. Avoid hard-coding sensitive data directly into your configuration files.</p>
+<p>For more detailed information about Harbor's configuration options, refer to the <a href="https://goharbor.io/docs/latest/install-config/">official Harbor documentation</a>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../PREREQUISITES/" class="btn btn-neutral float-left" title="Prerequisites"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../TESTING/" class="btn btn-neutral float-right" title="Testing">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../PREREQUISITES/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../TESTING/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Security - Harbor on EKS Deployment</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Security";
+        var mkdocs_page_input_path = "SECURITY.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Harbor on EKS Deployment
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../PREREQUISITES/">Prerequisites</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CONFIGURATION/">Configuration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../TESTING/">Testing</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Security</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#static-analysis">Static Analysis</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#security-features">Security Features</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#reporting-security-issues">Reporting Security Issues</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#security-updates">Security Updates</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../BRANCHING_STRATEGY/">Branching Strategy</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING/">Contributing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../ABOUT_DEVSECFLOW/">About DevSecFlow</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Harbor on EKS Deployment</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Security</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="security-considerations">Security Considerations</h1>
+<p>We take security seriously in this project. Here are some key security aspects and considerations:</p>
+<h2 id="static-analysis">Static Analysis</h2>
+<p>We use tfsec for static analysis of our Terraform configurations. Some checks are excluded based on the specific requirements of our Harbor on EKS deployment:</p>
+<ul>
+<li><code>aws-eks-no-public-cluster-access</code> and <code>aws-eks-no-public-cluster-access-to-cidr</code>: Our Harbor instance needs to be publicly accessible.</li>
+<li><code>aws-ec2-no-public-egress-sgr</code>: Harbor requires broad egress rules for its functionality.</li>
+<li><code>aws-rds-enable-performance-insights</code>: While beneficial, this is not critical for our current deployment.</li>
+</ul>
+<p>These exclusions are configured in the <code>.tfsec.yml</code> file. We continuously review our security posture and may adjust these exclusions in future updates.</p>
+<h2 id="security-features">Security Features</h2>
+<ol>
+<li><strong>EKS Security</strong>: We implement EKS best practices, including proper IAM roles and security groups.</li>
+<li><strong>RDS Security</strong>: The database is deployed in a private subnet with restricted access.</li>
+<li><strong>Network Security</strong>: We use VPC security groups to control inbound and outbound traffic.</li>
+<li><strong>Encryption</strong>: Data at rest is encrypted for EFS and RDS.</li>
+</ol>
+<h2 id="reporting-security-issues">Reporting Security Issues</h2>
+<p>If you discover a security vulnerability in this project, please report it to us by <a href="https://github.com/devsecflow/deploy-harbor-eks/issues">opening an issue</a> with the label "security". We ask that you give us a reasonable amount of time to respond and address the issue before making it public.</p>
+<h2 id="security-updates">Security Updates</h2>
+<p>We strive to keep all dependencies up-to-date, especially those with security implications. Regular reviews and updates are part of our maintenance process.</p>
+<p>Remember, security is a shared responsibility. While we've implemented several security measures, how you configure and use this deployment can also impact its security. Always follow AWS and Kubernetes security best practices in your environment.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../TESTING/" class="btn btn-neutral float-left" title="Testing"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../BRANCHING_STRATEGY/" class="btn btn-neutral float-right" title="Branching Strategy">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../TESTING/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../BRANCHING_STRATEGY/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

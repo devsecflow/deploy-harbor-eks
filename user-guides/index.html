@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Harbor User Guides - Harbor on EKS Deployment</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Harbor User Guides";
+        var mkdocs_page_input_path = "user-guides.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Harbor on EKS Deployment
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../PREREQUISITES/">Prerequisites</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CONFIGURATION/">Configuration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../TESTING/">Testing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SECURITY/">Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../BRANCHING_STRATEGY/">Branching Strategy</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING/">Contributing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../ABOUT_DEVSECFLOW/">About DevSecFlow</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Harbor on EKS Deployment</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Harbor User Guides</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="harbor-user-guides">Harbor User Guides</h1>
+<h2 id="running-a-vulnerability-scan-with-harbor">Running a Vulnerability Scan with Harbor</h2>
+<p>This guide will walk you through the process of pushing an image to Harbor, running a vulnerability scan, and interpreting the results. We'll use Nginx as our example image.</p>
+<h3 id="prerequisites">Prerequisites</h3>
+<ul>
+<li>Harbor is deployed and accessible</li>
+<li>Docker is installed on your local machine</li>
+<li>You have admin access to your Harbor instance</li>
+</ul>
+<h3 id="steps">Steps</h3>
+<ol>
+<li><strong>Log in to Harbor</strong></li>
+</ol>
+<p>Use the Docker CLI to log in to your Harbor instance:</p>
+<p><code>bash
+   docker login harbor.yourdomain.com</code></p>
+<p>Enter your Harbor credentials when prompted.</p>
+<ol>
+<li>
+<p><strong>Create a New Project</strong></p>
+</li>
+<li>
+<p>Log in to the Harbor web interface</p>
+</li>
+<li>Click on "New Project"</li>
+<li>Name your project (e.g., "nginx-test")</li>
+<li>Set the project to "Public" for this example</li>
+<li>
+<p>Click "OK" to create the project</p>
+</li>
+<li>
+<p><strong>Configure Automatic Scanning and SBOM Generation</strong></p>
+</li>
+<li>
+<p>In your project, go to the "Configuration" tab</p>
+</li>
+<li>Under "Vulnerability scanning", check "Automatically scan images on push"</li>
+<li>Under "SBOM generation", check "Automatically generate SBOM on push"</li>
+<li>
+<p>Click "Save" to apply these settings</p>
+</li>
+<li>
+<p><strong>Pull the Nginx Image</strong></p>
+</li>
+</ol>
+<p>Pull the latest Nginx image from Docker Hub:</p>
+<p><code>bash
+   docker pull nginx:latest</code></p>
+<ol>
+<li><strong>Tag the Nginx Image for Harbor</strong></li>
+</ol>
+<p>Tag the image with your Harbor registry:</p>
+<p><code>bash
+   docker tag nginx:latest harbor.yourdomain.com/nginx-test/nginx:v1</code></p>
+<ol>
+<li><strong>Push the Image to Harbor</strong></li>
+</ol>
+<p>Push the tagged image to your Harbor registry:</p>
+<p><code>bash
+   docker push harbor.yourdomain.com/nginx-test/nginx:v1</code></p>
+<ol>
+<li>
+<p><strong>View Scan Results</strong></p>
+</li>
+<li>
+<p>In the Harbor web interface, navigate to your "nginx-test" project</p>
+</li>
+<li>Find the nginx image you just pushed</li>
+<li>Click on the image name to view details</li>
+<li>Go to the "Vulnerabilities" tab to see the scan results</li>
+<li>
+<p>Review the list of vulnerabilities, their severity, and any available fixes</p>
+</li>
+<li>
+<p><strong>View SBOM</strong></p>
+</li>
+<li>
+<p>In the image details page, go to the "Artifacts" tab</p>
+</li>
+<li>You should see the SBOM artifact associated with your image</li>
+<li>
+<p>Click on the SBOM to view or download it</p>
+</li>
+<li>
+<p><strong>Interpret the Results</strong></p>
+</li>
+<li>
+<p>Pay special attention to "High" and "Critical" vulnerabilities</p>
+</li>
+<li>Consider updating to a newer version of Nginx if significant vulnerabilities are found</li>
+<li>Investigate mitigation strategies for any unresolved vulnerabilities</li>
+<li>Use the SBOM to understand the components of your image and their licenses</li>
+</ol>
+<h3 id="best-practices">Best Practices</h3>
+<ul>
+<li>Regularly scan your images for new vulnerabilities</li>
+<li>Use the automatic scanning and SBOM generation features for all projects</li>
+<li>Implement policies to prevent the deployment of images with critical vulnerabilities</li>
+<li>Review SBOMs to ensure compliance with license requirements and to identify outdated components</li>
+</ul>
+<p>By following these steps, you can effectively use Harbor to scan your container images for vulnerabilities and generate SBOMs, helping to maintain the security and compliance of your deployments.</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

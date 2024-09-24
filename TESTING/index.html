@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Testing - Harbor on EKS Deployment</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Testing";
+        var mkdocs_page_input_path = "TESTING.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Harbor on EKS Deployment
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../PREREQUISITES/">Prerequisites</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CONFIGURATION/">Configuration</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Testing</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#continuous-integration">Continuous Integration</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#adding-new-tests">Adding New Tests</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#running-individual-tests">Running Individual Tests</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#format-checking">Format Checking</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#configuration-validation">Configuration Validation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#static-code-analysis">Static Code Analysis</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#documentation-generation">Documentation Generation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#go-unit-tests">Go Unit Tests</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#test-coverage">Test Coverage</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#reporting-test-issues">Reporting Test Issues</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SECURITY/">Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../BRANCHING_STRATEGY/">Branching Strategy</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING/">Contributing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../ABOUT_DEVSECFLOW/">About DevSecFlow</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Harbor on EKS Deployment</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Testing</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="testing">Testing</h1>
+<p>We've included a comprehensive test suite to keep everything ship-shape. Here's how to run it:</p>
+<ol>
+<li>Navigate to the <code>test</code> directory:</li>
+</ol>
+<p><code>bash
+   cd test</code></p>
+<ol>
+<li>
+<p>Set the environment variable to specify whether you're using OpenTofu or Terraform:</p>
+</li>
+<li>
+<p>For <strong>OpenTofu</strong>:</p>
+<p><code>bash
+ export TERRATEST_TERRAFORM_EXECUTABLE=tofu</code></p>
+</li>
+<li>
+<p>For <strong>Terraform</strong>:</p>
+<p><code>bash
+ export TERRATEST_TERRAFORM_EXECUTABLE=terraform</code></p>
+</li>
+<li>
+<p>Run the test suite:</p>
+</li>
+</ol>
+<p><code>bash
+   make test</code></p>
+<p>This will run through a series of checks based on the tool you've selected:</p>
+<ul>
+<li>Format checking with <code>tofu fmt</code> or <code>terraform fmt</code></li>
+<li>Configuration validation with <code>tofu validate</code> or <code>terraform validate</code></li>
+<li>Static code analysis with <code>tflint</code></li>
+<li>Documentation generation with <code>terraform-docs</code> (if you have it installed)</li>
+<li>Unit tests with Go</li>
+</ul>
+<h2 id="continuous-integration">Continuous Integration</h2>
+<p>We've implemented a comprehensive CI pipeline using GitHub Actions. On every push and pull request, our workflow:</p>
+<ul>
+<li>Runs Go tests</li>
+<li>Checks Terraform or OpenTofu formatting</li>
+<li>Validates Terraform or OpenTofu configurations</li>
+<li>Runs <code>tflint</code> for additional linting</li>
+<li>Ensures documentation is up-to-date</li>
+<li>Performs security scans using Snyk and tfsec</li>
+<li>Lints Go code using golangci-lint</li>
+<li>Checks Markdown files for consistent styling</li>
+</ul>
+<p>You can find the workflow configuration in the <code>.github/workflows/ci.yml</code> file.</p>
+<h2 id="adding-new-tests">Adding New Tests</h2>
+<p>When adding new features or modifying existing ones, please ensure that appropriate tests are added or updated. This helps maintain the quality and reliability of the project.</p>
+<p>If you're unsure about how to test a particular component, feel free to open an issue or discuss it in your pull request.</p>
+<h2 id="running-individual-tests">Running Individual Tests</h2>
+<p>If you need to run specific tests or checks, you can use the following commands based on your chosen tool.</p>
+<h3 id="format-checking">Format Checking</h3>
+<p>To check the formatting of your OpenTofu or Terraform files:</p>
+<ul>
+<li>For <strong>OpenTofu</strong>:</li>
+</ul>
+<p><code>bash
+  tofu fmt -check -recursive ../tofu</code></p>
+<ul>
+<li>For <strong>Terraform</strong>:</li>
+</ul>
+<p><code>bash
+  terraform fmt -check -recursive ../tofu</code></p>
+<h3 id="configuration-validation">Configuration Validation</h3>
+<p>To validate your configuration:</p>
+<ul>
+<li>For <strong>OpenTofu</strong>:</li>
+</ul>
+<p><code>bash
+  cd ../tofu
+  tofu init -backend=false
+  tofu validate</code></p>
+<ul>
+<li>For <strong>Terraform</strong>:</li>
+</ul>
+<p><code>bash
+  cd ../tofu
+  terraform init -backend=false
+  terraform validate</code></p>
+<h3 id="static-code-analysis">Static Code Analysis</h3>
+<p>To run <code>tflint</code> on your files:</p>
+<pre><code class="language-bash">cd ../tofu
+tflint
+</code></pre>
+<h3 id="documentation-generation">Documentation Generation</h3>
+<p>To generate documentation using <code>terraform-docs</code>:</p>
+<pre><code class="language-bash">terraform-docs markdown table --output-file ../README.md --output-mode inject ../tofu
+</code></pre>
+<h3 id="go-unit-tests">Go Unit Tests</h3>
+<p>To run the Go unit tests:</p>
+<pre><code class="language-bash">go test -v ./...
+</code></pre>
+<h2 id="test-coverage">Test Coverage</h2>
+<p>We strive to maintain high test coverage for our codebase. While 100% coverage isn't always practical or necessary, we aim for comprehensive coverage of critical paths and edge cases.</p>
+<p>To view the current test coverage, you can run:</p>
+<pre><code class="language-bash">go test -cover ./...
+</code></pre>
+<p>For a more detailed coverage report, you can use:</p>
+<pre><code class="language-bash">go test -coverprofile=coverage.out ./...
+go tool cover -html=coverage.out
+</code></pre>
+<p>This will generate an HTML report of your test coverage, which you can view in your browser.</p>
+<h2 id="reporting-test-issues">Reporting Test Issues</h2>
+<p>If you encounter any issues with the tests or believe a test is incorrectly implemented, please open an issue on our GitHub repository. Provide as much detail as possible, including:</p>
+<ul>
+<li>The specific test that failed</li>
+<li>The expected behavior</li>
+<li>The actual behavior</li>
+<li>Any error messages or logs</li>
+</ul>
+<p>Your feedback helps us improve the reliability and effectiveness of our test suite.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../CONFIGURATION/" class="btn btn-neutral float-left" title="Configuration"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../SECURITY/" class="btn btn-neutral float-right" title="Security">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../CONFIGURATION/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../SECURITY/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
