@@ -92,6 +92,7 @@ jobs:
           else
             echo "Both test suites failed."
             exit 1  # Exit with failure
+          fi  # Ensure fi closes the if block
         shell: bash
 
   security:
