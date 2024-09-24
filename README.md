@@ -1,17 +1,19 @@
 # Harbor on EKS: Streamlined Deployment for Vulnerability Scanning
 
-Easily deploy Harbor, an open-source container registry and vulnerability scanning platform, on Amazon EKS using OpenTofu.
+> **Coming Soon**: We're excited to announce that our next major update will focus on modularizing the OpenTofu configuration. This will make it even easier to customize and use different components of the code independently, allowing for more flexible and tailored deployments. Stay tuned for a more adaptable and scalable Harbor on EKS solution!
+
+Easily deploy Harbor, an open-source container registry and vulnerability scanning platform, on Amazon EKS using OpenTofu or Terraform.
 
 ## Features and Benefits
 
-- **Effortless Deployment**: Get a production-ready Harbor up and running on Amazon EKS with just a few commands
-- **Scalable Architecture**: Uses EFS (Elastic File System) for persistent storage, allowing easy growth
-- **Secure Configuration**: Utilizes RDS for a robust and secure database backend
-- **Smart Load Balancing**: Implements AWS Load Balancer Controller for smooth traffic management
-- **Comprehensive Testing**: Includes a test suite and CI/CD integration for reliability
-- **Budget-Friendly**: Efficiently uses AWS services to optimize costs
-- **Customizable**: Easily adaptable to fit your organization's unique needs
-- **Best Practices Baked In**: Implements AWS and Kubernetes best practices right out of the box
+- **Effortless Deployment**: Get a production-ready Harbor up and running on Amazon EKS with just a few commands.
+- **Scalable Architecture**: Uses EFS (Elastic File System) for persistent storage, allowing easy growth.
+- **Secure Configuration**: Utilizes RDS for a robust and secure database backend.
+- **Smart Load Balancing**: Implements AWS Load Balancer Controller for smooth traffic management.
+- **Comprehensive Testing**: Includes a test suite and CI/CD integration for reliability.
+- **Budget-Friendly**: Efficiently uses AWS services to optimize costs.
+- **Customizable**: Easily adaptable to fit your organization's unique needs.
+- **Best Practices Baked In**: Implements AWS and Kubernetes best practices right out of the box.
 
 ## Quick Start
 
@@ -19,7 +21,7 @@ Easily deploy Harbor, an open-source container registry and vulnerability scanni
 
 Before you begin, ensure you have the following installed:
 
-- [OpenTofu](https://opentofu.org/docs/intro/install/) >= 1.8.0
+- [OpenTofu](https://opentofu.org/docs/intro/install/) >= 1.8.0 or [Terraform](https://www.terraform.io/downloads) >= 1.0
 - [AWS CLI](https://aws.amazon.com/cli/) (configured with appropriate permissions)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
 - [helm](https://helm.sh/docs/intro/install/)
@@ -27,7 +29,7 @@ Before you begin, ensure you have the following installed:
 ### macOS (using Homebrew)
 
 ```bash
-brew install opentofu awscli kubectl helm go tflint terraform-docs
+brew install opentofu terraform awscli kubectl helm go tflint terraform-docs
 ```
 
 ### Linux (Ubuntu/Debian)
@@ -38,6 +40,9 @@ curl -Lo ./tofu.tar.gz https://github.com/opentofu/opentofu/releases/latest/down
 tar -xzf tofu.tar.gz
 chmod +x tofu
 sudo mv tofu /usr/local/bin/
+
+# Terraform
+sudo apt-get update && sudo apt-get install -y terraform
 
 # AWS CLI
 sudo apt-get update && sudo apt-get install -y awscli
@@ -66,13 +71,14 @@ sudo mv terraform-docs /usr/local/bin/
 
 ### Configuration
 
-Create a `terraform.tfvars` file in the `tofu` directory with your specific values:
+Create a `terraform.tfvars` file in the `tofu` or `terraform` directory with your specific values:
 
 ```hcl
 region       = "us-west-2"
 cluster_name = "my-harbor-cluster"
 cert_arn     = "arn:aws:acm:us-west-2:123456789012:certificate/12345678-1234-1234-1234-123456789012"
 domain_name  = "harbor.example.com"
+vpc_cidr     = "10.0.0.0/16"
 ```
 
 Key variables:
@@ -81,6 +87,7 @@ Key variables:
 - `cluster_name`: Name for your EKS cluster
 - `cert_arn`: ARN of the ACM certificate for HTTPS
 - `domain_name`: Domain name for Harbor
+- `vpc_cidr`: Your VPC CIDR block
 
 ### Deployment
 
@@ -88,21 +95,22 @@ Key variables:
 
    ```bash
    git clone https://github.com/devsecflow/deploy-harbor-eks.git
-   cd deploy-harbor-eks/tofu
+   cd deploy-harbor-eks/tofu  # Or cd deploy-harbor-eks/terraform if using Terraform
    ```
 
-2. Set up environment variables:
+2. Initialize and apply:
 
    ```bash
-   export TF_VAR_db_password=$(openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)
-   ```
-
-3. Initialize and apply:
-
-   ```bash
+   # Using OpenTofu
    tofu init
    tofu apply
+
+   # Alternatively, using Terraform
+   terraform init
+   terraform apply
    ```
+
+   *Note: Since OpenTofu is still under development, some future updates may introduce breaking changes. If you encounter issues, using Terraform as an alternative is recommended for a more stable experience.*
 
 ## Documentation
 
@@ -114,7 +122,7 @@ Need help? [Open an issue](https://github.com/devsecflow/deploy-harbor-eks/issue
 
 ## About DevSecFlow
 
-DevSecFlow is a leading cybersecurity consulting firm specializing in innovative solutions for secure software development and deployment. This project is maintained by our team of experts committed to enhancing organizations' security postures through open-source tools and best practices. Visit us at devsecflow.com to learn more.
+DevSecFlow is a leading cybersecurity consulting firm specializing in innovative solutions for secure software development and deployment. This project is maintained by our team of experts committed to enhancing organizations' security postures through open-source tools and best practices. Visit us at [devsecflow.com](https://devsecflow.com) to learn more.
 
 ## License
 

@@ -29,6 +29,8 @@ variable "vpc_cidr" {
 }
 
 variable "db_password" {
-  type    = string
-  default = "PleaseChangeMEw"
+  description = "Password for the database. If not provided, one will be generated."
+  type        = string
+  sensitive   = true
+  default     = null
 }

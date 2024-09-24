@@ -20,4 +20,13 @@ module "eks" {
       desired_size   = 1
     }
   }
+
+  # Disable the creation of the aws-auth configmap
+  manage_aws_auth_configmap = false
+}
+
+# Output the IAM role ARN for the EKS managed node group
+output "eks_managed_node_groups_iam_role_arn" {
+  description = "IAM role ARN for EKS managed node group"
+  value       = module.eks.eks_managed_node_groups["${var.cluster_name}-node"].iam_role_arn
 }

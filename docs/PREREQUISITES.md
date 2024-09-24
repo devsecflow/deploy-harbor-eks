@@ -2,7 +2,7 @@
 
 Before deploying Harbor on EKS using this project, ensure you have the following tools and configurations in place:
 
-- [OpenTofu](https://opentofu.org/docs/intro/install/) >= 1.8.0
+- [OpenTofu](https://opentofu.org/docs/intro/install/) >= 1.8.0 or [Terraform](https://www.terraform.io/downloads) >= 1.0 (as an alternative)
 - [AWS CLI](https://aws.amazon.com/cli/) (configured with appropriate permissions)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
 - [helm](https://helm.sh/docs/intro/install/)
@@ -10,12 +10,16 @@ Before deploying Harbor on EKS using this project, ensure you have the following
 - [tflint](https://github.com/terraform-linters/tflint) (for linting)
 - [terraform-docs](https://terraform-docs.io/user-guide/installation/) (optional, for documentation generation)
 
+## Note
+
+You can use **Terraform** as an alternative to **OpenTofu** for deployment if you encounter issues with OpenTofu’s ongoing development.
+
 ## Installation Commands
 
 ### macOS (using Homebrew)
 
 ```bash
-brew install opentofu awscli kubectl helm go tflint terraform-docs
+brew install opentofu terraform awscli kubectl helm go tflint terraform-docs
 ```
 
 ### Linux (Ubuntu/Debian)
@@ -26,6 +30,9 @@ curl -Lo ./tofu.tar.gz https://github.com/opentofu/opentofu/releases/latest/down
 tar -xzf tofu.tar.gz
 chmod +x tofu
 sudo mv tofu /usr/local/bin/
+
+# Terraform (alternative to OpenTofu)
+sudo apt-get update && sudo apt-get install -y terraform
 
 # AWS CLI
 sudo apt-get update && sudo apt-get install -y awscli
@@ -50,4 +57,4 @@ chmod +x terraform-docs
 sudo mv terraform-docs /usr/local/bin/
 ```
 
-Remember to configure your AWS CLI with the appropriate permissions after installation.
+*Remember to configure your AWS CLI with the appropriate permissions after installation.*

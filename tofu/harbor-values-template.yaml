@@ -17,8 +17,8 @@ expose:
       alb.ingress.kubernetes.io/load-balancer-name: "harbor-${cluster_name}"
       alb.ingress.kubernetes.io/scheme: "internet-facing"
       alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS-1-1-2017-01
-      #alb.ingress.kubernetes.io/target-type: "ip"
-      #alb.ingress.kubernetes.io/listen-ports: "[{\"HTTPS\":443}]"
+      alb.ingress.kubernetes.io/target-type: "ip"
+      alb.ingress.kubernetes.io/listen-ports: "[{\"HTTPS\":443}]"
       alb.ingress.kubernetes.io/certificate-arn: ${cert_arn}
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/proxy-body-size: "0"
