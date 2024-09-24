@@ -15,18 +15,18 @@ func TestHarborDeployment(t *testing.T) {
 		t.Fatalf("Failed to find root directory: %v", err)
 	}
 
-	// Check if we are using OpenTofu or Terraform
+	// Get the executable from the environment variable (OpenTofu or Terraform)
 	executable := os.Getenv("TERRATEST_TERRAFORM_EXECUTABLE")
 	if executable == "" {
 		// Default to tofu if not specified
 		executable = "tofu"
 	}
 
-	// Change to the tofu or terraform directory based on the executable
-	dir := filepath.Join(rootDir, executable)
-	err = os.Chdir(dir)
+	// Change to the tofu directory (since you only have the 'tofu' folder)
+	tofuDir := filepath.Join(rootDir, "tofu")
+	err = os.Chdir(tofuDir)
 	if err != nil {
-		t.Fatalf("Failed to change directory to %s: %v", dir, err)
+		t.Fatalf("Failed to change directory to %s: %v", tofuDir, err)
 	}
 
 	// Print current directory for debugging
