@@ -71,7 +71,7 @@ sudo mv terraform-docs /usr/local/bin/
 
 ### Configuration
 
-Create a `terraform.tfvars` file in the `tofu` or `terraform` directory with your specific values:
+Create a `terraform.tfvars` file in the `tofu` directory:
 
 ```hcl
 region       = "us-west-2"
@@ -95,7 +95,7 @@ Key variables:
 
    ```bash
    git clone https://github.com/devsecflow/deploy-harbor-eks.git
-   cd deploy-harbor-eks/tofu  # Or cd deploy-harbor-eks/terraform if using Terraform
+   cd deploy-harbor-eks/tofu
    ```
 
 2. Initialize and apply:
